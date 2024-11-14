@@ -9,9 +9,6 @@ import copy from "../icons/copy.png";
 import UserFriends from "../icons/user-friends.png";
 import UserPlus from "../icons/user-plus.png";
 
-// import { initUtils } from "@telegram-apps/sdk";
-
-// const utils = initUtils();
 
 
 
