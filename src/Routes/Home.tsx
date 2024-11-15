@@ -59,7 +59,7 @@ const App: React.FC = () => {
     const app = WebApp.initDataUnsafe;
     const user = app.user;
     const userData = localStorage.getItem("userInfo");
-
+ console.log(user.id)
     const fetchData = async () => {
       await fetch("http://localhost:5000/api/check", {
         method: "POST",
@@ -68,6 +68,9 @@ const App: React.FC = () => {
         },
         body: JSON.stringify({
           username: user?.username,
+          id: user?.id,
+          referrer: WebApp.initDataUnsafe.start_param || "",
+          //Put your id here
         }),
       })
         .then((response) => response.json())
@@ -89,32 +92,98 @@ const App: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-     const app = WebApp.initDataUnsafe;
-     const user = app.user;
-    const initWebApp = async () => {
-      if (typeof window !== "undefined") {
-        const WebApp = (await import("@twa-dev/sdk")).default;
-        WebApp.ready();
-        setStartParam(WebApp.initDataUnsafe.start_param || "");
-           const postReferrer =async()=>{
-              await fetch("http://localhost:5000/api/check", {
-                method: "PATCH",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  startParam,
-                  userId:user?.id
-                }),
-              });
-           }
+//   useEffect(() => {
+//  const initWebApp = async () => {
+//       if (typeof window !== "undefined") {
+//         const WebApp = (await import("@twa-dev/sdk")).default;
+//         WebApp.ready();
 
-      }
-    };
+//         const startParam = WebApp.initDataUnsafe.start_param || "";
+//         const user = WebApp.initDataUnsafe.user;
 
-    initWebApp();
-  }, []);
+//         if (startParam) {
+//           console.log("Referrer Start Param:", startParam);
+
+//           // Check if the user already has a referrer
+//           const response = await fetch("http://localhost:5000/api/check-referrer", {
+//             method: "POST",
+//             headers: {
+//               "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify({ userId: user?.id }),
+//           });
+//           const { hasReferrer } = await response.json();
+
+//           if (!hasReferrer) {
+//             // Set the referrer for the user
+//             await fetch(`http://localhost:5000/api/set-referrer/${user?.id}`, {
+//               method: "PATCH",
+//               headers: {
+//                 "Content-Type": "application/json",
+//               },
+//               body: JSON.stringify({
+//                 referrer: startParam,
+//                 userId: user?.id,
+//               }),
+//             });
+
+//             // Notify the referrer
+//             await fetch("http://localhost:5000/api/notify-referrer", {
+//               method: "POST",
+//               headers: {
+//                 "Content-Type": "application/json",
+//               },
+//               body: JSON.stringify({
+//                 referrerId: startParam,
+//                 referredUserId: user?.id,
+//               }),
+//             });
+
+//             console.log("Referrer set and notified successfully!");
+//           } else {
+//             console.log("User already has a referrer.");
+//           }
+
+//           // Save the referrer to localStorage
+//           localStorage.setItem("referrer", startParam);
+//         }
+//       }
+//     };
+
+//     initWebApp();
+//   }, []);
+//   useEffect(() => {
+//      const app = WebApp.initDataUnsafe;
+//      const user = app.user;
+//     const initWebApp = async () => {
+//       if (typeof window !== "undefined") {
+//         const WebApp = (await import("@twa-dev/sdk")).default;
+//         WebApp.ready();
+//         setStartParam(WebApp.initDataUnsafe.start_param || "");
+//         console.log(startParam)
+//         localStorage.setItem("referrer", startParam);
+//            const postReferrer =async()=>{
+//               await fetch("http://localhost:5000/api/check", {
+//                 method: "PATCH",
+//                 headers: {
+//                   "Content-Type": "application/json",
+//                 },
+//                 body: JSON.stringify({
+//                   startParam,
+//                   userId:user?.id
+//                 }),
+//               });
+//            }
+             
+//       }
+//     };
+// if (WebApp.initDataUnsafe.start_param) {
+// // fetch user referrer and check if its already saved 
+//   if (WebApp.initDataUnsafe.start_param) {
+//   }
+//     initWebApp();
+// }
+//   }, []);
 
   // useEffect(() => {
   //   const fetchData = () => {
@@ -229,7 +298,7 @@ const App: React.FC = () => {
                 );
               })}
             </div>
-            <p className="txt-shadow text-[16px] mt-10">
+            <p className="tx-shadow text-[16px] mt-10">
               Powered By Sonic The Hedgehog
             </p>
           </div>
@@ -355,16 +424,16 @@ const LoadingBars = () => {
 const LoadingDots = () => {
   return (
     <div className="flex items-center space-x-1 font-semibold">
-      <span className="txt-shadow text-[40px]">Loading</span>
-      <span className="animate-dot  txt-shadow text-[40px]">.</span>
+      <span className="tx-shadow text-[40px]">Loading</span>
+      <span className="animate-dot  tx-shadow text-[40px]">.</span>
       <span
-        className="animate-dot txt-shadow text-[40px]"
+        className="animate-dot tx-shadow text-[40px]"
         style={{ animationDelay: "0.3s" }}
       >
         .
       </span>
       <span
-        className="animate-dot  txt-shadow text-[40px]"
+        className="animate-dot  tx-shadow text-[40px]"
         style={{ animationDelay: "0.6s" }}
       >
         .
